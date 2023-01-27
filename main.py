@@ -5,6 +5,7 @@ from datetime import datetime
 
 from config import *
 from mail import sand_smtp_email
+from notification import send_sms
 
 
 def get_rates():
@@ -65,20 +66,22 @@ def send_mail(receive_time, rates):
 
 
 def check_rate_price(rate: dict):
+    """
+    check if user defined notify rules and if rate reached to the defined
+    rules, then generate proper msg to send.
+    :param rate:
+    :return:mag(str)
+    """
     preferred = info_notification["preferred"]
     msg = ""
 
     for ext in preferred.keys():
         if rate[ext] <= preferred[ext]:
-            msg = f"{ext} reached min: {rate[ext]}"
+            msg = f"{ext} reached min: {rate[ext]}\n"
         elif rate[ext] >= preferred[ext]:
-            msg = f"{ext} reached max: {rate[ext]}"
+            msg = f"{ext} reached max: {rate[ext]}\n"
 
     return msg
-
-
-def send_notification(msg: str):
-    pass
 
 
 if __name__ == "__main__":
@@ -91,7 +94,7 @@ if __name__ == "__main__":
     if rules["send_mail"]:
         send_mail(receive_time, res["rates"])
 
-    # if rules["send_notification"]:
-    #     notification_msg = check_rate_price(res["rates"])
-    #     if notification_msg:
-    #         send_notification(notification_msg)
+    if rules["send_notification"]:
+        notification_msg = check_rate_price(res["rates"])
+        if notification_msg:
+            send_sms(notification_msg)

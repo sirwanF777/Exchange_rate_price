@@ -8,17 +8,22 @@ url_free = "https://api.exchangerate.host/latest"
 info_mail = {
     "smtp_server": "smtp.gmail.com",
     "port": 465,
-    "sender": "sirwan.farajpanah79@gmail.com",
-    "password": "juvviqgmkujefzim",
-    "receiver": "sirwan.farajpanah1379@gmail.com",
-    # "email_receiver": "info@progillss.com",
+
+    "sender": "sirwan.testmail@gmail.com",
+    "password": "qkwldkmzblvdtqoh",
+    # The recipient's password is "exchangerate" to see the email sent
+    "receiver": "exchange.rate.project@gmail.com",
+    # "receiver": "info@progillss.com",
     # preferred default is None,
     # preferred = None,
     "preferred": ["ANG", "BTC", "EUR", "IRR"]
 }
 
 info_notification = {
-    "receiver": "09109107005",
+    # receiver phone number
+    "receiver": "09***",
+    # your api ket in kavenegar site
+    "API_key": "",
     "preferred": {
         "ANG": {"min": 1.3, "max": 2.5},
         "IRR": {"min": 39000, "max": 50000}
@@ -28,5 +33,5 @@ info_notification = {
 rules = {
     "archive": True,
     "send_mail": True,
-    "send_notification": True
+    "send_notification": False
 }
