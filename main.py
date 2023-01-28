@@ -2,6 +2,7 @@ import requests
 import json
 import os
 from datetime import datetime
+from khayyam import JalaliDatetime
 
 from config import *
 from mail import sand_smtp_email
@@ -22,13 +23,14 @@ def get_rates():
     return None
 
 
-def archive(file_name, rates):
+def archive(rates):
     """
     add archive folder, get filename and rates, save them to the specific directory
     :param file_name:
     :param rates:
     :return:
     """
+    file_name = datetime.now().strftime("%Y-%m-%dT%H.%M.%S")
     if "archive" not in os.listdir():
         directory = "archive"
         parent_dir = os.getcwd()
@@ -39,16 +41,7 @@ def archive(file_name, rates):
         f.write(json.dumps(rates))
 
 
-def now_time():
-    """
-    we get the current date and time using the datetime library
-    :return:
-    """
-    time = f"{datetime.now()}".replace(" ", "T").split(".")[0]
-    return time
-
-
-def send_mail(receive_time, rates):
+def send_mail(rates):
     """
     get receive_time and rates, check if there is preferred rates and
     then send email through smtp
@@ -56,7 +49,7 @@ def send_mail(receive_time, rates):
     :param rates:
     :return:
     """
-    subject = f"{receive_time} rates"
+    subject = f"{JalaliDatetime.now().strftime('%Y-%m-%d %H:%M')} rates"
     if info_mail["preferred"] is not None:
         rates = {i: rates[i] for i in info_mail["preferred"] if i in rates.keys()}
 
@@ -65,7 +58,7 @@ def send_mail(receive_time, rates):
     sand_smtp_email(subject, text)
 
 
-def check_rate_price(rate: dict):
+def check_rate_price(rate):
     """
     check if user defined notify rules and if rate reached to the defined
     rules, then generate proper msg to send.
@@ -76,23 +69,24 @@ def check_rate_price(rate: dict):
     msg = ""
 
     for ext in preferred.keys():
-        if rate[ext] <= preferred[ext]:
-            msg = f"{ext} reached min: {rate[ext]}\n"
-        elif rate[ext] >= preferred[ext]:
-            msg = f"{ext} reached max: {rate[ext]}\n"
+        if rate[ext] <= preferred[ext]["min"]:
+            msg = str(JalaliDatetime.now().strftime('%Y-%m-%d %H:%M'))
+            msg += f"\n{ext} reached min: {rate[ext]}\n"
+        elif rate[ext] >= preferred[ext]["max"]:
+            msg = str(JalaliDatetime.now().strftime('%Y-%m-%d %H:%M'))
+            msg += f"\n{ext} reached max: {rate[ext]}\n"
 
     return msg
 
 
 if __name__ == "__main__":
     res = get_rates()
-    receive_time = now_time()
 
     if rules["archive"]:
-        archive(receive_time, res["rates"])
+        archive(res["rates"])
 
     if rules["send_mail"]:
-        send_mail(receive_time, res["rates"])
+        send_mail(res["rates"])
 
     if rules["send_notification"]:
         notification_msg = check_rate_price(res["rates"])

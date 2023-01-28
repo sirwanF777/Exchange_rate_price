@@ -9,11 +9,9 @@ info_mail = {
     "smtp_server": "smtp.gmail.com",
     "port": 465,
 
-    "sender": "sirwan.testmail@gmail.com",
-    "password": "qkwldkmzblvdtqoh",
-    # The recipient's password is "exchangerate" to see the email sent
-    "receiver": "exchange.rate.project@gmail.com",
-    # "receiver": "info@progillss.com",
+    "sender": "sender's email: info@progillss.com",
+    "password": "sender's email password",
+    "receiver": "receiver's email: info@progillss.com",
     # preferred default is None,
     # preferred = None,
     "preferred": ["ANG", "BTC", "EUR", "IRR"]
