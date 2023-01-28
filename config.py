@@ -30,6 +30,6 @@ info_notification = {
 
 rules = {
     "archive": True,
-    "send_mail": True,
+    "send_mail": False,
     "send_notification": False
 }

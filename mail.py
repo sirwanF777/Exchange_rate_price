@@ -16,6 +16,7 @@ def sand_smtp_email(subject, body):
             server.login(info_mail["sender"], info_mail["password"])
             server.send_message(msg)
         except smtplib.SMTPAuthenticationError as e:
-            print(f"satus code is [{e.smtp_code}]\nUsername and Password not accepted.")
+            print(f"satus code is [{e.smtp_code}]\n"
+                  f"Username and Password not accepted.")
         except smtplib.SMTPException as e:
             print(e)

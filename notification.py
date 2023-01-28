@@ -15,6 +15,9 @@ def send_sms(msg):
         response = api.sms_send(params)
         print(f"{response}\nSMS sent successfully.")
     except APIException as e:
-        print(e)
+        print(f"ERROR: {str(e)[2:19]}\n"
+              f"لطفا با توجه به خطای رخ داده،"
+              f" دلیل خطای خود را از طریق آدرس سایت زیر دنبال کنید.\n"
+              f"https://kavenegar.com/soap.html")
     except HTTPException as e:
         print(e)
