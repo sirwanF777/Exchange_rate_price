@@ -5,7 +5,7 @@ from datetime import datetime
 from khayyam import JalaliDatetime
 
 from config import *
-from mail import sand_smtp_email
+from mailgun import send_mail
 from notification import send_sms
 
 
@@ -46,23 +46,6 @@ def archive(rates):
         f.write(json.dumps(rates))
 
 
-def send_mail(rates):
-    """
-    get receive_time and rates, check if there is preferred rates and
-    then send email through smtp
-    :param receive_time:
-    :param rates:
-    :return:
-    """
-    subject = f"{JalaliDatetime.now().strftime('%Y-%m-%d %H:%M')} rates"
-    if info_mail["preferred"] is not None:
-        rates = {i: rates[i] for i in info_mail["preferred"] if i in rates.keys()}
-
-    text = json.dumps(rates)
-
-    sand_smtp_email(subject, text)
-
-
 def check_rate_price(rate):
     """
     check if user defined notify rules and if rate reached to the defined
@@ -70,7 +53,7 @@ def check_rate_price(rate):
     :param rate:
     :return:mag(str)
     """
-    preferred = info_notification["preferred"]
+    preferred = rules["notification"]["preferred"]
     msg = ""
 
     for ext in preferred.keys():
@@ -91,10 +74,10 @@ if __name__ == "__main__":
         if rules["archive"]:
             archive(res["rates"])
 
-        if rules["send_mail"]:
+        if rules["mail"]["enable"]:
             send_mail(res["rates"])
 
-        if rules["send_notification"]:
+        if rules["notification"]["enable"]:
             notification_msg = check_rate_price(res["rates"])
             if notification_msg:
                 send_sms(notification_msg)
