@@ -13,14 +13,14 @@ info_notification = {
 }
 
 rules = {
-    "archive": False,
+    "archive": True,
     "mail": {
         "enable": False,
         # preferred default is None,
         "preferred": ["ANG", "BTC", "EUR", "IRR"]
     },
     "notification": {
-        "enable": True,
+        "enable": False,
         # preferred default is None,
         "preferred": {
             "ANG": {"min": 1.3, "max": 2.5},

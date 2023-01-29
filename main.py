@@ -1,4 +1,3 @@
-import requests
 import json
 import os
 from datetime import datetime
@@ -7,25 +6,7 @@ from khayyam import JalaliDatetime
 from config import *
 from mailgun import send_mail
 from notification import send_sms
-
-
-def get_rates():
-    """
-    send a get requests to the api.exchangerate.host api and get live rates
-    :return:
-    """
-    try:
-        response = requests.get(url_free)
-    except requests.exceptions.ConnectionError as e:
-        print(f"ERROR: The connection attempt failed.\n"
-              f"Please make sure you are connected to the internet.")
-        return None
-    if response.status_code == 200:
-        return json.loads(response.text)
-
-    print(f"error\nYour request has encountered status code"
-          f" {response.status_code}. Please check")
-    return None
+from currency import get_rates
 
 
 def archive(rates):
@@ -68,7 +49,7 @@ def check_rate_price(rate):
 
 
 if __name__ == "__main__":
-    res = get_rates()
+    res = get_rates(url_free)
 
     if res:
         if rules["archive"]:
