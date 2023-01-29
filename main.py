@@ -5,7 +5,7 @@ from khayyam import JalaliDatetime
 
 from config import *
 from mailgun import send_mail
-from notification import send_sms
+from SMSgun import send_sms
 from currency import get_rates
 
 
@@ -61,4 +61,6 @@ if __name__ == "__main__":
         if rules["notification"]["enable"]:
             notification_msg = check_rate_price(res["rates"])
             if notification_msg:
-                send_sms(notification_msg)
+                send_sms(info_notification['API_key'],
+                         notification_msg,
+                         info_notification["receiver"])
