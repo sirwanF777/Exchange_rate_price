@@ -1,9 +1,9 @@
 from kavenegar import *
 
 
-def send_sms(API_key, msg, receiver):
+def send_sms(api_key, msg, receiver):
     try:
-        api = KavenegarAPI(API_key)
+        api = KavenegarAPI(api_key)
         params = {
             'sender': "",
             # multiple mobile number, split by comma
